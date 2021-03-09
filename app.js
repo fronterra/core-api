@@ -11,8 +11,6 @@ app.use(express.urlencoded({ extended: true }));
 // logging system
 app.use(morgan("tiny"));
 
-app.use(cors());
-
 /** 404 handler */
 app.use(function(request, response, next) {
     const err = new ExpressError("Not Found", 404);
