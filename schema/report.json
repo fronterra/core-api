@@ -1,0 +1,167 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "$id": "http://example.com/example.json",
+    "type": "object",
+    "title": "The root schema",
+    "description": "The root schema comprises the entire JSON document.",
+    "default": {},
+    "examples": [
+        {
+            "public": {
+                "address": "",
+                "description": "",
+                "date": "",
+                "inputType": "",
+                "photos": [],
+                "videos": []
+            },
+            "private": {
+                "name": "",
+                "phoneNumber": ""
+            }
+        }
+    ],
+    "required": [
+        "public",
+        "private"
+    ],
+    "properties": {
+        "public": {
+            "$id": "#/properties/public",
+            "type": "object",
+            "title": "The public schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "address": "",
+                    "description": "",
+                    "date": "",
+                    "inputType": "",
+                    "photos": [],
+                    "videos": []
+                }
+            ],
+            "required": [
+                "address",
+                "description",
+                "date",
+                "inputType",
+                "photos",
+                "videos"
+            ],
+            "properties": {
+                "address": {
+                    "$id": "#/properties/public/properties/address",
+                    "type": "string",
+                    "title": "The address schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "description": {
+                    "$id": "#/properties/public/properties/description",
+                    "type": "string",
+                    "title": "The description schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "date": {
+                    "$id": "#/properties/public/properties/date",
+                    "type": "string",
+                    "title": "The date schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "inputType": {
+                    "$id": "#/properties/public/properties/inputType",
+                    "type": "string",
+                    "title": "The inputType schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "photos": {
+                    "$id": "#/properties/public/properties/photos",
+                    "type": "array",
+                    "title": "The photos schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        []
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/public/properties/photos/items"
+                    }
+                },
+                "videos": {
+                    "$id": "#/properties/public/properties/videos",
+                    "type": "array",
+                    "title": "The videos schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": [],
+                    "examples": [
+                        []
+                    ],
+                    "additionalItems": true,
+                    "items": {
+                        "$id": "#/properties/public/properties/videos/items"
+                    }
+                }
+            },
+            "additionalProperties": true
+        },
+        "private": {
+            "$id": "#/properties/private",
+            "type": "object",
+            "title": "The private schema",
+            "description": "An explanation about the purpose of this instance.",
+            "default": {},
+            "examples": [
+                {
+                    "name": "",
+                    "phoneNumber": ""
+                }
+            ],
+            "required": [
+                "name",
+                "phoneNumber"
+            ],
+            "properties": {
+                "name": {
+                    "$id": "#/properties/private/properties/name",
+                    "type": "string",
+                    "title": "The name schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                },
+                "phoneNumber": {
+                    "$id": "#/properties/private/properties/phoneNumber",
+                    "type": "string",
+                    "title": "The phoneNumber schema",
+                    "description": "An explanation about the purpose of this instance.",
+                    "default": "",
+                    "examples": [
+                        ""
+                    ]
+                }
+            },
+            "additionalProperties": true
+        }
+    },
+    "additionalProperties": true
+}
