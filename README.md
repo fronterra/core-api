@@ -30,10 +30,16 @@ Default region name [None]: us-west-2
 Default output format [None]: json
 ```
 
-3. Create an S3 Bucket
+3. Create a development S3 Bucket
 ```
-user@MacBook-Pro ~ % aws s3 mb s3://fronterra-media
-make_bucket: fronterra-media
+user@MacBook-Pro ~ % aws s3 mb s3://fronterra-development
+make_bucket: fronterra-development
+```
+
+4. Create test S3 Bucket
+```
+user@MacBook-Pro ~ % aws s3 mb s3://fronterra-media-test
+make_bucket: fronterra-media-test
 ```
 
 ## Endpoints
