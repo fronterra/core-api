@@ -1,0 +1,11 @@
+# environment variables
+*.env*
+
+# node modules
+*node_modules*
+
+# created by mac os
+*.DS_STORE*
+
+# created by vim
+*.swp*
