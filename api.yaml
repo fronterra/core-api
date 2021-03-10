@@ -1,0 +1,71 @@
+openapi: 3.0.0
+info:
+  version: 0.0.1
+  title: fronterra-core-api
+servers:
+  - url: 'http://localhost:4000'
+paths:
+  /media:
+    post:
+      summary: 'Media upload endpoint: coordinates storage of photos and images in an S3 Bucket, and links media resources to report objects in MongoDB'
+      operationId: uploadMediaFile
+      tags:
+        - media
+      requestBody:
+        content:
+            multipart/form-data:
+                schema:
+                    type: object
+                    properties:
+                        reportId:
+                            type: string
+                        mediaId:
+                            type: string
+                        mediaFile:
+                            type: string
+                            format: binary
+      responses:
+        '201':
+          description: 'Successful request: new media resource was created on the server'
+          headers:
+            x-next:
+              description: A message suggesting that the resource was create
+              schema:
+                type: string
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Media'
+        default:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    Media:
+      type: object
+      required:
+        - mediaId
+        - reportId
+        - mediaFile
+      properties:
+        mediaId:
+          type: string
+        reportId:
+          type: string
+        mediaFile:
+          type: string
+          format: binary
+    Error:
+      type: object
+      required:
+        - status
+        - message
+      properties:
+        status:
+          type: integer
+          format: int32
+        message:
+          type: string
