@@ -65,10 +65,10 @@ function s3Bucket(region, bucketName) {
          * @param {String} keysObject.groupId
          * @param {String} keysObject.groupType
          * 
-         * @param {any} body
+         * @param {any} file
          * 
          */
-        async uploadObject({ itemId, itemType, groupId, groupType }, body) {
+        async uploadObject({ itemId, itemType, groupId, groupType }, file) {
 
             try {
                 // this will throw an error if inputs are not correctly typed
@@ -83,7 +83,7 @@ function s3Bucket(region, bucketName) {
                     Key: serializedKey,
 
                     // Content of the new object.
-                    Body: body
+                    Body: file
                 }
             
                 const data = await s3.send(new PutObjectCommand(uploadParams));
