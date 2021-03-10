@@ -1,15 +1,28 @@
 const express = require("express");
+const bodyParser = require('body-parser');
 const morgan = require("morgan");
+const cors = require('cors');
+const fileUpload = require('express-fileupload');
 const ExpressError = require("./ExpressError");
+
 
 // creates an app object
 const app = express();
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
 
-// logging system
+// enables file uploads
+app.use(fileUpload({
+  createParentPath: true
+}));
+
+// additional middleware
+app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
+
+
+
 
 /** 404 handler */
 app.use(function(request, response, next) {
@@ -17,6 +30,9 @@ app.use(function(request, response, next) {
     // pass the error to the next piece of middleware
     return next(err);
 });
+
+
+
 
 /** general error handler */
 app.use(function(err, request, response, next) {
