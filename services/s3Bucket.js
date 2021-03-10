@@ -105,5 +105,5 @@ const getFile = (fp) => {
     const filePath = path.join(__dirname, fp);
     return fs.readFile(filePath); 
 }
-b.uploadObject({ groupType: 'reports', groupId: '1234', itemType: 'media', itemId: '4322'}, require('path').basename('./package.json'))
+
 module.exports = s3Bucket;
