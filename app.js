@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const ExpressError = require("./ExpressError");
+const media = require('./routes/media');
 
 
 // creates an app object
@@ -21,6 +22,9 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(morgan("tiny"));
 
+
+// routes
+app.use('/media', media);
 
 
 
