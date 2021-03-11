@@ -88,6 +88,7 @@ function s3Bucket(region, bucketName) {
                     Body: file
                 }
             
+                // sends file object to s3 bucket and stores response in data variable
                 const data = await s3.send(new PutObjectCommand(uploadParams));
 
                 // caches most recent response
