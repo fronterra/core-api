@@ -7,160 +7,131 @@
     "default": {},
     "examples": [
         {
-            "public": {
-                "address": "",
-                "description": "",
-                "date": "",
-                "inputType": "",
-                "photos": [],
-                "videos": []
-            },
-            "private": {
-                "name": "",
-                "phoneNumber": ""
-            }
+            "description": "this is the description",
+            "location": "coordinates or address",
+            "locationType": "manual",
+            "pollutionType": "waste",
+            "mediaIds": [],
+            "mediaUploadSuccesses": [],
+            "mediaUploadFailures": []
         }
     ],
     "required": [
-        "public",
-        "private"
+        "description",
+        "location",
+        "locationType",
+        "pollutionType",
+        "mediaIds",
+        "mediaUploadSuccesses",
+        "mediaUploadFailures"
     ],
     "properties": {
-        "public": {
-            "$id": "#/properties/public",
-            "type": "object",
-            "title": "The public schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": {},
+        "description": {
+            "$id": "#/properties/description",
+            "default": "",
+            "description": "Description of observed pollution or further explanation of media evidence if provided.",
             "examples": [
-                {
-                    "address": "",
-                    "description": "",
-                    "date": "",
-                    "inputType": "",
-                    "photos": [],
-                    "videos": []
-                }
+                "this is the description"
             ],
-            "required": [
-                "address",
-                "description",
-                "date",
-                "inputType",
-                "photos",
-                "videos"
-            ],
-            "properties": {
-                "address": {
-                    "$id": "#/properties/public/properties/address",
-                    "type": "string",
-                    "title": "The address schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "description": {
-                    "$id": "#/properties/public/properties/description",
-                    "type": "string",
-                    "title": "The description schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "date": {
-                    "$id": "#/properties/public/properties/date",
-                    "type": "string",
-                    "title": "The date schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "inputType": {
-                    "$id": "#/properties/public/properties/inputType",
-                    "type": "string",
-                    "title": "The inputType schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "photos": {
-                    "$id": "#/properties/public/properties/photos",
-                    "type": "array",
-                    "title": "The photos schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": [],
-                    "examples": [
-                        []
-                    ],
-                    "additionalItems": true,
-                    "items": {
-                        "$id": "#/properties/public/properties/photos/items"
-                    }
-                },
-                "videos": {
-                    "$id": "#/properties/public/properties/videos",
-                    "type": "array",
-                    "title": "The videos schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": [],
-                    "examples": [
-                        []
-                    ],
-                    "additionalItems": true,
-                    "items": {
-                        "$id": "#/properties/public/properties/videos/items"
-                    }
-                }
-            },
-            "additionalProperties": true
+            "title": "The description schema",
+            "type": "string"
         },
-        "private": {
-            "$id": "#/properties/private",
-            "type": "object",
-            "title": "The private schema",
-            "description": "An explanation about the purpose of this instance.",
-            "default": {},
+        "location": {
+            "$id": "#/properties/location",
+            "default": "",
+            "description": "Location coordinates",
             "examples": [
-                {
-                    "name": "",
-                    "phoneNumber": ""
-                }
+                "coordinates or address"
             ],
-            "required": [
-                "name",
-                "phoneNumber"
+            "title": "The location schema",
+            "type": "string"
+        },
+        "locationType": {
+            "$id": "#/properties/locationType",
+            "default": "",
+            "description": "Describes how the location property was ascertained",
+            "enum": [
+                "manual",
+                "geo-located"
             ],
-            "properties": {
-                "name": {
-                    "$id": "#/properties/private/properties/name",
-                    "type": "string",
-                    "title": "The name schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        ""
-                    ]
-                },
-                "phoneNumber": {
-                    "$id": "#/properties/private/properties/phoneNumber",
-                    "type": "string",
-                    "title": "The phoneNumber schema",
-                    "description": "An explanation about the purpose of this instance.",
-                    "default": "",
-                    "examples": [
-                        ""
-                    ]
-                }
-            },
-            "additionalProperties": true
+            "examples": [
+                "manual"
+            ],
+            "title": "The locationType schema",
+            "type": "string"
+        },
+        "pollutionType": {
+            "$id": "#/properties/pollutionType",
+            "default": "",
+            "description": "An explanation about the purpose of this instance.",
+            "examples": [
+                "waste"
+            ],
+            "title": "The pollutionType schema",
+            "enum": [
+                "Chemicals",
+                "Discolored Water",
+                "Sewage",
+                "Storm Drain Pollution",
+                "Oil or Sheen",
+                "Infrastructure Damage",
+                "Trash",
+                "Idling Truck",
+                "Air Pollution"
+            ],
+            "type": "string"
+        },
+        "mediaIds": {
+            "$id": "#/properties/mediaIds",
+            "default": [],
+            "description": "An array containing one mediaId for each attempted photo upload in the report form",
+            "examples": [
+                "60498f8f12160c6c91203df0",
+                "60498fa112160c6c91203df1"
+            ],
+            "title": "The mediaIds schema",
+            "uniqueItems": true,
+            "type": "array",
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/mediaIds/items",
+                "title": "mediaId",
+                "type": "string"
+            }
+        },
+        "mediaUploadSuccesses": {
+            "$id": "#/properties/mediaUploadSuccesses",
+            "default": [],
+            "description": "An array containing one mediaId for each successful photo upload in the report form",
+            "examples": [
+                "60498f8f12160c6c91203df0"
+            ],
+            "title": "The mediaUploadSuccesses schema",
+            "uniqueItems": true,
+            "type": "array",
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/mediaUploadSuccesses/items",
+                "title": "mediaId",
+                "type": "string"
+            }
+        },
+        "mediaUploadFailures": {
+            "$id": "#/properties/mediaUploadFailures",
+            "default": [],
+            "description": "An array containing one mediaId for each failed photo upload in the report form",
+            "examples": [
+                "60498fa112160c6c91203df1"
+            ],
+            "title": "The mediaUploadFailures schema",
+            "uniqueItems": true,
+            "type": "array",
+            "additionalItems": true,
+            "items": {
+                "$id": "#/properties/mediaUploadFailures/items",
+                "title": "mediaId",
+                "type": []
+            }
         }
     },
     "additionalProperties": true
