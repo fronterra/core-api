@@ -1,7 +1,5 @@
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3"); // import aws client sdk
 const serializeS3Key = require('./serializeS3Key'); // import key serializer
-const fs = require('fs');
-const path = require('path');
 
 /**
  * Creates an `S3Client` instance and returns an
@@ -41,10 +39,14 @@ function s3Bucket(region, bucketName) {
         throw new ExpressError(err.message, err.status || 500);
     }
     
-    
-
+    // cache of all responses and errors incurred by instance
     const responseCache = [];
 
+    /**
+     * Takes a response object or err and
+     * pushes it to the cache
+     * @param {Object} res 
+     */
     const cacheResponse = (res) => responseCache.push(res);
 
 
@@ -87,23 +89,25 @@ function s3Bucket(region, bucketName) {
                 }
             
                 const data = await s3.send(new PutObjectCommand(uploadParams));
+
+                // caches most recent response
                 cacheResponse(data);
                 return data;
             } catch (err) {
+                // caches most recent response
                 cacheResponse(err);
                 // handle errors
                 throw new ExpressError(err.message, err.status || 500);
             }
         },
+        /**
+         * Returns `responseCache` containing all
+         * response objects
+         */
         getCache () {
             return responseCache;
         }
     }
 };
-
-const getFile = (fp) => {
-    const filePath = path.join(__dirname, fp);
-    return fs.readFile(filePath); 
-}
 
 module.exports = s3Bucket;
