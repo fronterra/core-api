@@ -1,9 +1,14 @@
 const express = require('express');
-const router = express.Router();
+
+// middleware and model imports
 const s3Bucket = require('../services/s3Bucket');
-const ExpressError = require('../ExpressError');
-const { AWS_S3_NAME: bucketName, AWS_S3_REGION: region } = require('../config');
 const { validateMediaUpload } = require('../middleware/validation');
+
+// env variables
+const { AWS_S3_NAME: bucketName, AWS_S3_REGION: region } = require('../config');
+
+// router
+const router = express.Router();
 
 /**
  * `POST /media`
