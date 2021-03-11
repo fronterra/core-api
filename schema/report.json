@@ -130,7 +130,7 @@
             "items": {
                 "$id": "#/properties/mediaUploadFailures/items",
                 "title": "mediaId",
-                "type": []
+                "type": "string"
             }
         }
     },
