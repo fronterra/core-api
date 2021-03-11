@@ -27,7 +27,7 @@ router.post('/', async function (request, response, next) {
         };
 
         // send file to s3 bucket
-        const res = await bucketOperations.uploadObject(keysObject, request.files.mediaFile);
+        const res = await bucketOperations.uploadObject(keysObject, request.files.mediaFile.data);
 
         return response.json({ res });
     } catch (err) {
