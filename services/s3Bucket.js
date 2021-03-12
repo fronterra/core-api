@@ -101,7 +101,7 @@ function s3Bucket(region, bucketName) {
                 throw new ExpressError(err.message, err.status || 500);
             }
         },
-        async getObject(key) {
+        async downloadObject(key) {
             try {
                 // checks to see if s3 client is instantiated before attempting retrieval
                 if (!s3) throw new ExpressError('S3Client instance not found', 500);
