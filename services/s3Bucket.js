@@ -136,7 +136,7 @@ function s3Bucket(region, bucketName) {
             if (!s3) {
                 s3 = new S3Client({ region })
             }
-        }
+        },
         /**
          * Returns `responseCache` containing all
          * response objects
