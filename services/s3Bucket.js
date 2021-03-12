@@ -1,4 +1,4 @@
-const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3"); // import aws client sdk
+const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3"); // import aws client sdk
 const serializeS3Key = require('./serializeS3Key'); // import key serializer
 
 /**
@@ -99,6 +99,42 @@ function s3Bucket(region, bucketName) {
                 cacheResponse(err);
                 // handle errors
                 throw new ExpressError(err.message, err.status || 500);
+            }
+        },
+        async getObject(key) {
+            try {
+                // checks to see if s3 client is instantiated before attempting retrieval
+                if (!s3) throw new ExpressError('S3Client instance not found', 500);
+
+                // params object with search targets
+                const params = {
+                    Bucket: bucketName,
+                    Key: key
+                };
+
+                // get file from storage
+                const data = await s3.send(new GetObjectCommand(params));
+
+                // cache the response
+                cacheResponse(data);
+
+                // return data object
+                return data;
+            } catch (err) {
+                // cache error
+                cacheResponse(err);
+
+                // handle and throw new error
+                throw new ExpressError(err.message, err.status || 500);
+            }
+        },
+        /**
+         * Can be called to reset S3Client instance if not valid,
+         * should not be able to interrupt already connected client.
+         */
+        resetS3Client() {
+            if (!s3) {
+                s3 = new S3Client({ region })
             }
         },
         /**
