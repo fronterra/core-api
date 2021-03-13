@@ -16,28 +16,30 @@ paths:
     post:
       summary: Uploads file to server.
       # description: Optional extended description could go here, MD supported
-      content:
-        application/json:
-          schema:
-            type: object
-            required:
-              - mediaId
-              - reportId
-            properties:
-              mediaId:
-                type: string
-              reportId:
-                type: string
-        
-        multipart/form-data:
-          schema:
-            type: object
-            required:
-              - mediaFile
-            properties:
-              mediaFile:
-                type: string
-                format: binary
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - mediaId
+                - reportId
+              properties:
+                mediaId:
+                  type: string
+                reportId:
+                  type: string
+          
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - mediaFile
+              properties:
+                mediaFile:
+                  type: string
+                  format: binary
 
       responses:
         201:
