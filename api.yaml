@@ -16,36 +16,36 @@ paths:
     post:
       summary: Uploads file to server.
       # description: Optional extended description could go here, MD supported
-
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - mediaId
-                - reportId
-              properties:
-                mediaId:
-                  type: string
-                reportId:
-                  type: string
-          
-          multipart/form-data:
-            schema:
-              type: object
-              required:
-                - mediaFile
-              properties:
-                mediaFile:
-                  type: string
-                  format: binary
+      content:
+        application/json:
+          schema:
+            type: object
+            required:
+              - mediaId
+              - reportId
+            properties:
+              mediaId:
+                type: string
+              reportId:
+                type: string
+        
+        multipart/form-data:
+          schema:
+            type: object
+            required:
+              - mediaFile
+            properties:
+              mediaFile:
+                type: string
+                format: binary
 
       responses:
         201:
           description: Successful request, resource was added on server
         412: 
           description: Error, invalid inputs
+
+
   /reports:
     get:
       summary: Returns an array of reports
