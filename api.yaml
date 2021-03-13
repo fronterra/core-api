@@ -2,46 +2,59 @@ openapi: 3.0.0
 info:
   version: 0.0.1
   title: fronterra-core-api
+
 servers:
+  - url: 'http://api.example.com/v1' # TODO: update
+    description: Production server
+  - url: 'http://api.example.com/v1/testing' # TODO: update
+    description: Staging server
   - url: 'http://localhost:4000'
+    description: Development server
+
 paths:
   /media:
     post:
-      summary: 'Media upload endpoint: coordinates storage of photos and images in an S3 Bucket, and links media resources to report objects in MongoDB'
-      operationId: uploadMediaFile
-      tags:
-        - media
+      summary: Uploads file to server.
+      # description: Optional extended description could go here, MD supported
+
       requestBody:
         content:
-            multipart/form-data:
-                schema:
-                    type: object
-                    properties:
-                        reportId:
-                            type: string
-                        mediaId:
-                            type: string
-                        mediaFile:
-                            type: string
-                            format: binary
+          application/json:
+            schema:
+              type: object
+              required:
+                - mediaId
+                - reportId
+              properties:
+                mediaId:
+                  type: string
+                reportId:
+                  type: string
+          
+          multipart/form-data:
+            schema:
+              type: object
+              required:
+                - mediaFile
+              properties:
+                mediaFile:
+                  type: string
+                  format: binary
+
       responses:
-        '201':
-          description: 'Successful request: new media resource was created on the server'
-          headers:
-            x-next:
-              description: A message suggesting that the resource was create
-              schema:
-                type: string
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Media'
-        default:
-          description: Unexpected error
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+        201:
+          description: Successful request, resource was added on server
+        412: 
+          description: Error, invalid inputs
+  /reports:
+    get:
+      summary: Returns an array of reports
+      # more needed
+
+    post:
+      summary: Creates a new report on server
+      # more needed
+
 components:
   schemas:
     Media:
@@ -49,7 +62,7 @@ components:
       required:
         - mediaId
         - reportId
-        - mediaFile
+        - mediaFiler
       properties:
         mediaId:
           type: string
