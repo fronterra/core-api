@@ -46,7 +46,14 @@ paths:
           description: Successful request, resource was added on server
         412: 
           description: Error, invalid inputs
+  /reports:
+    get:
+      summary: Returns an array of reports
+      # more needed
 
+    post:
+      summary: Creates a new report on server
+      # more needed
 
 components:
   schemas:
