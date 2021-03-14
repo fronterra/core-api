@@ -15,13 +15,13 @@ const router = express.Router();
  * 
  * - Calls express-fileupload middleware to parse the request header for content-types of `multipart/formData`
  * - If founds, recieved files are set on the `request.files` property
- * - Custom middleware `validateMediaUpload` is called to validate the file upload and that both `reportId` and `mediaId` were passed in `request.body`.
+ * - Custom middleware `validateMediaUpload` is called to validate the file upload and that both `reportId` and `mediaId` were passed in `request.query`.
  * 
  */
 router.post('/', validateMediaUpload, async function (request, response, next) {
     try {
         // destructure variables from request body
-        const { reportId, mediaId } = request.body;
+        const { reportId, mediaId } = request.query;
 
         // initializes an s3 client instance in the target region according to your baked-in credentials
         const bucketOperations = s3Bucket(region, bucketName); 
