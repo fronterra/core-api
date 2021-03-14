@@ -3,9 +3,12 @@ const ExpressError = require('../ExpressError');
 /**
  * Validates incoming request body for following
  * properties:
- * - `reportId`
- * - `mediaId`
  * - `mediaFile` *from* `request.body.files`
+ * 
+ * 
+ * And query string params for the following:
+ * - `mediaId`
+ * - `reportId`
  */
 function validateMediaUpload(request, response, next) {
     try {

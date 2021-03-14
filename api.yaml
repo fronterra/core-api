@@ -55,10 +55,52 @@ paths:
     get:
       summary: Returns an array of reports
       # more needed
+      parameters:
+        - in: query
+        name: page
+        schema:
+          type: integer
+        description: Specifies the number of a page to recieve
+
+  /reports/{reportId}:
+    get:
+      summary: Returns a single report object
+      parameters:
+        - in: path
+          name: reportId   # Note the name is the same as in the path
+          required: true
+          schema:
+            type: string
+      
+      responses:
+        200:
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  reportId:
+                    type: string
+                    description: report id string
+                  description:
+                    type: string
+                    description: A description of the pollution observed
+                  pollutionType:
+                    type: string
+                    description: Category of pollution
+                  location:
+                    type: string
+                    description: coordinates of the report
+                  
+
+      # more needed
+
 
     post:
       summary: Creates a new report on server
       # more needed
+
+
 
 components:
   schemas:
