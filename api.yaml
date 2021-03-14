@@ -72,7 +72,7 @@ paths:
           schema:
             type: string
       
-      response:
+      responses:
         200:
           content:
             application/json:
