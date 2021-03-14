@@ -60,7 +60,14 @@ paths:
         name: page
         schema:
           type: integer
+          # needs a default property that defaults to one
         description: Specifies the number of a page to recieve
+        - in: query
+        name: size
+        schema:
+          type: integer
+          # needs a default property that defaults to 25 or something
+        description: Specifies the maximum number of reports to return per page
 
   /reports/{reportId}:
     get:
@@ -74,6 +81,7 @@ paths:
       
       responses:
         200:
+          description: Successful response
           content:
             application/json:
               schema:
@@ -91,6 +99,15 @@ paths:
                   location:
                     type: string
                     description: coordinates of the report
+                  mediaIds:
+                    schema:
+                      type: array
+                      items:
+                        type: string
+
+        404:
+          description: Not Found
+
                   
 
       # more needed
