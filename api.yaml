@@ -57,17 +57,17 @@ paths:
       # more needed
       parameters:
         - in: query
-        name: page
-        schema:
-          type: integer
-          # needs a default property that defaults to one
-        description: Specifies the number of a page to recieve
+          name: page
+          schema:
+            type: integer
+            # needs a default property that defaults to one
+          description: Specifies the number of a page to recieve
         - in: query
-        name: size
-        schema:
-          type: integer
-          # needs a default property that defaults to 25 or something
-        description: Specifies the maximum number of reports to return per page
+          name: size
+          schema:
+            type: integer
+            # needs a default property that defaults to 25 or something
+          description: Specifies the maximum number of reports to return per page
 
   /reports/{reportId}:
     get:
