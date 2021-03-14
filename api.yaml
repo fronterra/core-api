@@ -69,6 +69,20 @@ paths:
             # needs a default property that defaults to 25 or something
           description: Specifies the maximum number of reports to return per page
 
+
+      responses:
+        200:
+          description: Successful Response
+          content:
+            application/json:
+              schema:
+                type: array
+        500:
+          descriptions: Unexpected error.
+
+
+              
+
   /reports/{reportId}:
     get:
       summary: Returns a single report object
@@ -100,14 +114,12 @@ paths:
                     type: string
                     description: coordinates of the report
                   mediaIds:
-                    schema:
-                      type: array
-                      items:
-                        type: string
-
+                    type: array
+                    description: Array of media ids
         404:
-          description: Not Found
-
+          description: A user with the specified ID was not found.
+        500:
+          description: Unexpected error.
                   
 
       # more needed
@@ -117,16 +129,63 @@ paths:
       summary: Creates a new report on server
       # more needed
 
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - description
+                - location
+                - locationType
+                - datetime
+                - datetimeType
+                - pollutionType
+                - mediaIds
+                - mediaUploadSuccesses
+                - mediaUploadFailures
+
+              properties:
+                description:
+                  type: string
+                location:
+                  type: string
+                locationType:
+                  type: string
+                datetime:
+                  type: string
+                datetimeType:
+                  type: string
+                pollutionType:
+                  type: string
+                mediaIds:
+                  type: array
+                mediaUploadSuccesses:
+                  type: array
+                mediaUploadFailures:
+                  type: array
+
+      responses:
+        201:
+          description: Successful request
+        500: 
+          description: Unexpected error.
+              
 
 
 components:
   schemas:
-    Media:
+    Report:
       type: object
       required:
-        - mediaId
-        - reportId
-        - mediaFiler
+        - description
+        - location
+        - locationType
+        - datetime
+        - datetimeType
+        - pollutionType
+        - mediaIds
       properties:
         mediaId:
           type: string
