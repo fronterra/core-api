@@ -16,21 +16,24 @@ paths:
     post:
       summary: Uploads file to server.
       # description: Optional extended description could go here, MD supported
+
+      parameters:
+        - in: query
+          name: reportId
+          required: true
+          schema:
+            type: string
+          description: the id of an associated report object
+        - in: query
+          name: mediaId
+          required: true
+          schema:
+            type: string
+          description: The id assigned to mediaFile 
+
       requestBody:
         required: true
         content:
-          application/json:
-            schema:
-              type: object
-              required:
-                - mediaId
-                - reportId
-              properties:
-                mediaId:
-                  type: string
-                reportId:
-                  type: string
-          
           multipart/form-data:
             schema:
               type: object
