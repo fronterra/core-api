@@ -60,6 +60,29 @@
             "title": "The locationType schema",
             "type": "string"
         },
+        "datetime": {
+            "$id": "#/properties/datetime",
+            "default": "",
+            "description": "date time string",
+            "examples": [
+                "01 Jan 1970 00:00:00 GMT"
+            ],
+            "title": "The datetime schema",
+            "type": "string"
+        },
+        "datetimeType": {
+            "$id": "#/properties/datetimeType",
+            "default": "",
+            "description": "Describes whether or not reported time is retroactive",
+            "enum": [
+                "current", "retroactive"
+            ],
+            "examples": [
+                "current"
+            ],
+            "title": "The datetimeType schema",
+            "type": "string"
+        },
         "pollutionType": {
             "$id": "#/properties/pollutionType",
             "default": "",
