@@ -18,3 +18,10 @@ router.post('/', async function(request, response, next) {
     }
 });
 
+router.get('/', async function(request, response, next) {
+    try {
+
+    } catch (err) {
+        return next(err);
+    }
+});
