@@ -20,10 +20,9 @@
         "description",
         "location",
         "locationType",
-        "pollutionType",
-        "mediaIds",
-        "mediaUploadSuccesses",
-        "mediaUploadFailures"
+        "datetime",
+        "datetimeType",
+        "pollutionType"
     ],
     "properties": {
         "description": {
