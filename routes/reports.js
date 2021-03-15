@@ -25,3 +25,11 @@ router.get('/', async function(request, response, next) {
         return next(err);
     }
 });
+
+router.get('/:routerId', async function(request, response, next) {
+    try {
+
+    } catch (err) {
+        return next(err);
+    }
+});
