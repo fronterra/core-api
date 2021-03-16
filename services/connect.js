@@ -1,31 +1,60 @@
 /** Contains logic for creating instance of mongodb connection */
 const { MongoClient } = require('mongodb');
 const { DB_URI, DB_NAME } = require('../config');
-const ExpressError = require('../helpers/ExpressError');
+const ExpressError = require('../ExpressError');
 
-/** returns a database */
-const getConnection = async () => {
-  
-  
-  try {
-    //create a new database cluster client instance
-    const client = new MongoClient(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+/**
+ * Instantiates a `MongoClient` instance and returns
+ * an object containing methods for operating on them.
+ */
+async function mongoClientHandler() {
+    try {
+        // create new instance of MongoClient
+        const client = new MongoClient(DB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+        //attempt connection to cluster
+        await client.connect();
     
-    //connect to database cluster
-    await client.connect();
+        // focus client connection on specific db in cluster
+        const db = client.db(DB_NAME);
 
-    //establish connection with specific database by name
-    const db = client.db(DB_NAME);
+        return {
+            /**
+             * Returns instance of
+             * specified collection. 
+             * 
+             * @param {String} collectionName 
+             */
+            getCollectionInstance(collectionName) {
+                return db.collection(collectionName);
+            },
+            /**
+             * Calls `client.close()` on the original `MongoClient`
+             * instance.
+             * 
+             */
+            async killSwitch() {
+                try {
+                    if (client) {
+                        await client.close();
+                        return;
+                    }
+                } catch (err) {
+                    throw new ExpressError('Error occured while attempting to close database client', 500);
+                }
+            },
+            /**
+             * Returns boolean evaluation of
+             * client connection
+             */
+            checkClientConnection() {
+                return !!client;
+            }
+        }        
+    } catch (err) {
 
-    return [ db, client ];
+    }
+};
 
-  } catch (err) {
-    //read msg to console
-    console.log(err);
-
-    //throw internal error
-    throw new ExpressError('There was an error connecting with the server', 500);
-  }
-}
-
-module.exports = getConnection;
+module.exports = { mongoClientHandler };
