@@ -1,4 +1,6 @@
 const databaseOps = require('../services/databaseOps');
+const argsMatchOp = require('../services/argsMatchOp');
+
 const ExpressError = require('../ExpressError');
 
 class Report {
@@ -18,16 +20,27 @@ class Report {
      */
     static async read(operation, args) {
         try {
-            // check that `idArray` is an array
-            if (!Array.isArray(idArray)) throw new ExpressError('idArray parameter is required and must be an Array containing at least one element', 400);
-
-            // check that the array isn't empty
-            if (idArray.length < 1) throw new ExpressError('idArray cannot be an empty array', 400);
+            // throws error if operation and args are mismatched
+            argsMatchOp(operation, args);
 
             // attempt connection with database
             const dbOps = await databaseOps('reports');
 
-            const result = readMany ? await dbOps.getPage()
+            switch (operation) {
+                case 'search':
+                    // calls `dbOps.search(args.query)`
+                    return;
+                case 'fullPage': 
+                    // calls `dbOps.getPage(args.page, args.size)
+                    return;
+                case 'singleReport':
+                    // calls `dbOps.getResource(args.reportId)`
+                    return;
+                default:
+                    // default operation
+                    return;
+            }
+            
         } catch (err) {
             throw new ExpressError(err.message, err.status);
         }
