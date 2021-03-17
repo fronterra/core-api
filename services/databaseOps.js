@@ -45,11 +45,19 @@ async function databaseOps(collectionName) {
              */
             async getResource(resourceId) {
                 try {
-                    return collection.findOne({ _id: resourceId });
+                    const result = await collection.findOne({ _id: resourceId });
+                    return result;
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
                 } finally {
                     await killSwitch();
+                }
+            },
+            async search(query) {
+                try {
+                    const results = await collection.find();
+                } catch (err) {
+                    throw new ExpressError(err.message, err.status || 500);
                 }
             }
         }
