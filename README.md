@@ -12,10 +12,42 @@ Use the following instructions and source code to deploy a complete community-su
 A key component of the reporting API is its ability to store media relating to an incidence of pollution. In order to accomplish this, our system relies on two different data-stores: MongoDB and AWS S3. MongoDB is a NoSQL database that stores unstructured information in the form of "documents". Although we *can* store media in MongoDB under certain encodings, there are far better options for the storage of potentially large media files. We are going to use an AWS S3 bucket. In the following section, you will find information on how to setup both databases.
 
 ### MongoDB
+MongoDB is a database and cloud services provider. We will be using two of their products: *Community Server* (a local database) for testing, and *Cloud Atlas* for production.
 
 #### Atlas
+1. [Create an Atlas Account](https://docs.atlas.mongodb.com/tutorial/create-atlas-account/)
+2. Create a Cluster
+3. Connect your Cluster to the CLI 
+4. Create the following databases from the CLI
+```
+
+```
+ 
 
 #### Community Server
+
+##### Setting up MongoDB Community Server
+1. [Installation instructions for Mac](https://zellwk.com/blog/install-mongodb/)
+2. [Installation instructions for Windows](https://treehouse.github.io/installation-guides/windows/mongo-windows.html)
+3. [Instructions for working with mongodb locally](https://zellwk.com/blog/local-mongodb/)
+4. Once you have access to the `db` shell object and its methods, execute the following commands
+
+##### Running Tests on Community Server
+This part is easy. Once all the above steps have been taken, you can run test suites with the command: `npm test`.
+
+
+```
+> use <your-test-database-name-here>
+switched to db <your-test-database-name-here>
+> db.createCollection('media')
+{ "ok" : 1 }
+> db.createCollection('reports')
+{ "ok" : 1 }
+> db.createCollection('regulators')
+{ "ok" : 1 }
+> db.createCollection('admins')
+{ "ok" : 1 }
+```
 
 ### AWS S3
 1. Download the AWS CLI v2. See OS dependent instructions [here](https://docs.aws.amazon.com/cli/latest/userguide/install-cliv2.html).
