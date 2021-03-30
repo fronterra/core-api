@@ -1,6 +1,14 @@
 const { mongoClientHandler } = require('./connect');
 const ExpressError = require('../ExpressError');
 
+
+/**
+ * Returns a collection of database operation functions 
+ * for the specified collection.
+ * 
+ * @param {String} collectionName 
+ * 
+ */
 async function databaseOps(collectionName) {
     try {
         // get helpful utility functions from our mongo client handler
@@ -24,8 +32,14 @@ async function databaseOps(collectionName) {
                     // calculates the number of skips based on page number and size of page
                     const skips = size * (page - 1)
 
+                    // insert an empty query object
+                    const query = {};
+
+                    // sorts by ascending timestamp
+                    const sort = { timestamp: 1 };
+
                     // stores a cursor containing a page of resource objects
-                    const cursor = collection.find().skip(skips).limit(size);
+                    const cursor = collection.find(query).sort(sort).skip(skips).limit(size);
 
                     // convert the cursor into an array
                     const reportsArray = await cursor.toArray();
@@ -55,11 +69,16 @@ async function databaseOps(collectionName) {
             },
             async search(query) {
                 try {
-                    const results = await collection.find();
+                    const results = collection.find(query);
+                    const array = await results.toArray();
+                    return array;
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
                 }
-            }
+            },
+            async createNewResource() {},
+            
+
         }
     } catch (err) {
         throw new ExpressError(err.message, err.status || 500);
