@@ -2,6 +2,18 @@ process.env.NODE_ENV = "test"; // declare test env
 
 const { TEST_COLLECTION_NAME, DB_NAME, DB_URI } = require('../../config');
 const { MongoClient } = require('mongodb');
+const databaseOps = require('../../services/databaseOps');
+
+// define mock data for tests
+const testData = [
+            { firstName: "Alyssa", hometown: "Upland" },
+            { firstName: "Abhi", hometown: "Singapore" },
+            { firstName: "Noah", hometown: "Columbus" },
+            { firstName: "Austin", hometown: "Columbus"},
+            { firstName: "Gio", hometown: "Orlando" },
+            { firstName: "Claire", hometown: "Columbus" },
+            { firstName: "Ceren", hometown: "Istanbul" }
+];
 
 beforeAll(async () => {
     // create new MongoClient instance
@@ -18,19 +30,8 @@ beforeAll(async () => {
         const database = client.db(DB_NAME);
         const collection = database.collection(TEST_COLLECTION_NAME);
 
-        // defines some mock data including a name and a town
-        const people = [
-            { firstName: "Alyssa", hometown: "Upland" },
-            { firstName: "Abhi", hometown: "Singapore" },
-            { firstName: "Noah", hometown: "Columbus" },
-            { firstName: "Austin", hometown: "Columbus"},
-            { firstName: "Gio", hometown: "Orlando" },
-            { firstName: "Claire", hometown: "Columbus" },
-            { firstName: "Ceren", hometown: "Istanbul" }
-        ];
-
         // insert the array of mock data
-        await collection.insert(people);
+        await collection.insert(testData);
 
     } catch(err) {
         console.log(err);
@@ -40,8 +41,15 @@ beforeAll(async () => {
     }
 });
 
-describe('tests for databaseOps().getPage', function() {
-    it('should return')
+describe('tests for databaseOps().getPage', async function() {
+    // retrieve getPage function from object returned from databaseOps function closure
+    const { getPage } = await databaseOps(TEST_COLLECTION_NAME);
+
+    it('should successfully get a page of results', async function() {
+        const query = {};
+        const projection = {};
+        const pageSize = 
+    });
 })
 
 afterAll(async () => {
