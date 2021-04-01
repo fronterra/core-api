@@ -36,7 +36,7 @@ async function databaseOps(collectionName) {
              */
             async getPage(query, projection, pageNumber, pageSize) {
                 try {
-                    // input verification logic
+                    // TODO: add input verification logic -->
                     // should include a step that checks input types and required properties in
                     // query and projection
 
