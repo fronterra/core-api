@@ -19,15 +19,22 @@ async function databaseOps(collectionName) {
 
         return {
             /**
-             * Returns an array of resources given
-             * a specified page index number and size of page.
+             * Takes four parameters--`query <Object>`, `projection <Object>`, 
+             * `pageNumber <Number>`, `pageSize <Number>`--and returns an array of objects
+             * representing one page of results.
              * 
              * *NOTE:* Page indices start at 1.
              * 
-             * @param {Number} page page number
-             * @param {Number} size qty of resources per page
+             * @param {Object} query a query object as defined in MongoDB Node.js driver docs. It sets
+             * the search parameters for what kinds of resources should be returned by a database.
+             * 
+             * @param {Object} projection a projection object as defined in the MongoDB Node.js driver docs.
+             * It sets the output properties of the objects in the return array.
+             * 
+             * @param {Number} pageNumber sets the maximum number of results to be returned by the array.
+             * @param {Number} pageSize determines the number of results to skip before returning a results array.
              */
-            async getPage(page, size) {
+            async getPage(query, projection, pageNumber, pageSize) {
                 try {
                     // calculates the number of skips based on page number and size of page
                     const skips = size * (page - 1)
