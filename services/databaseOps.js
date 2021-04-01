@@ -56,10 +56,10 @@ async function databaseOps(collectionName) {
                     const cursor = collection.find(query, options).skip(skips).limit(pageSize);
 
                     // convert the cursor into an array
-                    const reportsArray = await cursor.toArray();
+                    const resultsArray = await cursor.toArray();
 
                     // return results
-                    return reportsArray;
+                    return resultsArray;
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
                 } finally {
