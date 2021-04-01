@@ -45,5 +45,27 @@ describe('tests for databaseOps().getPage', function() {
 })
 
 afterAll(async () => {
-    // handle database tear down
+    // create new MongoClient instance
+    const client = new MongoClient(DB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+
+    try {
+        // initiate live connection between client instance and specified database uri
+        await client.connect();
+
+        // get connection with target test database and collection
+        const database = client.db(DB_NAME);
+        const collection = database.collection(TEST_COLLECTION_NAME);
+
+        // delete all documents in the database
+        collection.deleteMany({});
+        
+    } catch (err) {
+        console.log(err);
+    } finally {
+        // close live connection with database
+        await client.close();
+    }
 })
