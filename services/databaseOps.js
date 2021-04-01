@@ -36,21 +36,29 @@ async function databaseOps(collectionName) {
              */
             async getPage(query, projection, pageNumber, pageSize) {
                 try {
-                    // calculates the number of skips based on page number and size of page
-                    const skips = size * (page - 1)
+                    // input verification logic
+                    // should include a step that checks input types and required properties in
+                    // query and projection
 
-                    // insert an empty query object
-                    const query = {};
+                    // calculates the number of skips based on page number and size of page
+                    const skips = pageSize * (pageNumber - 1)
 
                     // sorts by ascending timestamp
                     const sort = { timestamp: 1 };
 
+                    // assemble an options object that includes the sort and projection preferences
+                    const options = {
+                        projection,
+                        sort
+                    };
+
                     // stores a cursor containing a page of resource objects
-                    const cursor = collection.find(query).sort(sort).skip(skips).limit(size);
+                    const cursor = collection.find(query, options).skip(skips).limit(pageSize);
 
                     // convert the cursor into an array
                     const reportsArray = await cursor.toArray();
 
+                    // return results
                     return reportsArray;
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
