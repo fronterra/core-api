@@ -48,8 +48,8 @@ describe('tests for databaseOps().getPage', function() {
             const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
 
             // defines parameters
-            const query = {};
-            const projection = {};
+            const query = new Object();
+            const projection = new Object;
             const pageSize = testData.length;
             const pageNumber = 1;
 
@@ -69,8 +69,8 @@ describe('tests for databaseOps().getPage', function() {
             const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
 
             // defines parameters
-            const query = {};
-            const projection = {};
+            const query = new Object;
+            const projection = new Object;
             const pageSize = testData.length;
             const pageNumber = 2;
 
@@ -82,8 +82,30 @@ describe('tests for databaseOps().getPage', function() {
         } catch(err) {
             console.log(err);
         }
-    })
-})
+    });
+
+    it('Throws error if non-object type arg is passed to query or projection parameter', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
+
+            // defines parameters
+            const query = new String('This is a string');
+            const projection = new Object();
+            const pageSize = testData.length;
+            const pageNumber = 1;
+
+            // get results 
+            const results = await getPage(query, projection, pageNumber, pageSize);
+            console.log(results);
+
+            // test that the returned array is empty
+            expect(results.message).toBe(0);
+        } catch(err) {
+            expect(err.message).toStrictEqual('query and projection args must both be type Object.');
+        }
+    });
+});
 
 afterAll(async () => {
     // create new MongoClient instance
@@ -109,4 +131,4 @@ afterAll(async () => {
         // close live connection with database
         await client.close();
     }
-})
+});
