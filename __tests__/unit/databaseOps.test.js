@@ -102,6 +102,7 @@ describe('tests for databaseOps().getPage', function() {
             // test that the returned array is empty
             expect(results.message).toBe(0);
         } catch(err) {
+            console.log(err);
             expect(err.message).toStrictEqual('query and projection args must both be type Object.');
         }
     });
