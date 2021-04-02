@@ -95,15 +95,27 @@ describe('tests for databaseOps().getPage', function() {
             const pageSize = testData.length;
             const pageNumber = 1;
 
-            // get results 
-            const results = await getPage(query, projection, pageNumber, pageSize);
-            console.log(results);
-
-            // test that the returned array is empty
-            expect(results.message).toBe(0);
+            // call function, but don't store return value since error is expected
+            await getPage(query, projection, pageNumber, pageSize);
         } catch(err) {
-            console.log(err);
             expect(err.message).toStrictEqual('query and projection args must both be type Object.');
+        }
+    });
+
+    it('Throws error if pageNumber or pageSize are less than 1', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
+
+            // defines parameters
+            const query = new Object();
+            const projection = new Object();
+            const pageSize = testData.length;
+            const pageNumber = 0;
+
+            await getPage(query, projection, pageNumber, pageSize);
+        } catch(err) {
+            expect(err.message).toStrictEqual('indices for pageNumber and pageSize begin at 1; cannot be 0 or negative numbers');
         }
     });
 });
