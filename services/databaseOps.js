@@ -36,17 +36,22 @@ async function databaseOps(collectionName) {
              */
             async getPage(query, projection, pageNumber, pageSize) {
                 try {
-                    // TODO: add input verification logic -->
-                    if (typeof query === 'object' && typeof projection === 'object') {
+
+                    // throw error if query or projection are passed non-object args
+                    if (typeof query !== 'object' || typeof projection !== 'object') {
                         throw new ExpressError('query and projection args must both be type Object.', 500);
                     }
 
-                    if (typeof pageNumber === 'number' && typeof pageSize === 'number') {
+                    // throw error if pageNumber or pageSize are passed non-Number args
+                    if (typeof pageNumber !== 'number' || typeof pageSize !== 'number') {
                         throw new ExpressError('pageNumber and pageSize args must both be type Number.', 500);
                     }
-                    // should include a step that checks input types and required properties in
-                    // query and projection
 
+                    // throw error if pageNumber or pageSize are less than 1
+                    if (pageNumber < 1 || pageSize < 1) {
+                        throw new ExpressError('indices for pageNumber and pageSize begin at 1; cannot be 0 or negative numbers', 500);
+                    }
+                    
                     // calculates the number of skips based on page number and size of page
                     const skips = pageSize * (pageNumber - 1)
 
