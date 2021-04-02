@@ -63,7 +63,7 @@ describe('tests for databaseOps().getPage', function() {
         }
     });
 
-    it('Should get empty array if page extends range of results', async function() {
+    it('Should get empty array if pageSize * pageNumber extends index range of results', async function() {
         try {
             // retrieve getPage function from object returned from databaseOps function closure
             const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
@@ -77,7 +77,7 @@ describe('tests for databaseOps().getPage', function() {
             // get results 
             const results = await getPage(query, projection, pageNumber, pageSize);
 
-            // test that the returned array has as many items as the testData array
+            // test that the returned array is empty
             expect(results.length).toBe(0);
         } catch(err) {
             console.log(err);
