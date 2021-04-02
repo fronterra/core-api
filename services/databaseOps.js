@@ -59,7 +59,11 @@ async function databaseOps(collectionName) {
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
                 }
-            }
+            },
+            async setManyResources() {},
+            async setResource() {},
+            async deleteResource() {},
+            async updateResource() {}
         }
     } catch (err) {
         throw new ExpressError(err.message, err.status || 500);
