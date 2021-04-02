@@ -37,6 +37,13 @@ async function databaseOps(collectionName) {
             async getPage(query, projection, pageNumber, pageSize) {
                 try {
                     // TODO: add input verification logic -->
+                    if (typeof query === 'object' && typeof projection === 'object') {
+                        throw new ExpressError('query and projection args must both be type Object.', 500);
+                    }
+
+                    if (typeof pageNumber === 'number' && typeof pageSize === 'number') {
+                        throw new ExpressError('pageNumber and pageSize args must both be type Number.', 500);
+                    }
                     // should include a step that checks input types and required properties in
                     // query and projection
 
