@@ -31,7 +31,7 @@ beforeAll(async () => {
         const collection = database.collection(TEST_COLLECTION_NAME);
 
         // insert the array of mock data
-        await collection.insert(testData);
+        await collection.insertMany(testData);
 
     } catch(err) {
         console.log(err);
@@ -41,15 +41,29 @@ beforeAll(async () => {
     }
 });
 
-describe('tests for databaseOps().getPage', async function() {
-    // retrieve getPage function from object returned from databaseOps function closure
-    const { getPage } = await databaseOps(TEST_COLLECTION_NAME);
+describe('tests for databaseOps().getPage', function() {
+    it('should retrieve exactly as many results as are in the collection, and then an empty array ', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
 
-    it('should successfully get a page of results', async function() {
-        const query = {};
-        const projection = {};
-        const pageSize = 
+            // defines parameters
+            const query = {};
+            const projection = {};
+            const pageSize = testData.length;
+            const pageNumber = 1;
+
+            // get results 
+            const results = await getPage(query, projection, pageNumber, pageSize);
+
+            // test that the returned array has as many items as the testData array
+            expect(results.length).toBe(testData.length);
+        } catch(err) {
+            console.log(err);
+        }
     });
+
+    it('Should retrieve ')
 })
 
 afterAll(async () => {
@@ -68,7 +82,7 @@ afterAll(async () => {
         const collection = database.collection(TEST_COLLECTION_NAME);
 
         // delete all documents in the database
-        collection.deleteMany({});
+        await collection.deleteMany({}); // this MUST have an await statement before, or client will attempt closure during deletion
         
     } catch (err) {
         console.log(err);
