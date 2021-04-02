@@ -1,0 +1,147 @@
+process.env.NODE_ENV = "test"; // declare test env
+
+const { TEST_COLLECTION_NAME, DB_NAME, DB_URI } = require('../../config');
+const { MongoClient } = require('mongodb');
+const databaseOps = require('../../services/databaseOps');
+
+// define mock data for tests
+const testData = [
+            { firstName: "Alyssa", hometown: "Upland" },
+            { firstName: "Abhi", hometown: "Singapore" },
+            { firstName: "Noah", hometown: "Columbus" },
+            { firstName: "Austin", hometown: "Columbus"},
+            { firstName: "Gio", hometown: "Orlando" },
+            { firstName: "Claire", hometown: "Columbus" },
+            { firstName: "Ceren", hometown: "Istanbul" }
+];
+
+beforeAll(async () => {
+    // create new MongoClient instance
+    const client = new MongoClient(DB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+
+    try {
+        // initiate live connection between client instance and specified database uri
+        await client.connect();
+
+        // get connection with target test database and collection
+        const database = client.db(DB_NAME);
+        const collection = database.collection(TEST_COLLECTION_NAME);
+
+        // insert the array of mock data
+        await collection.insertMany(testData);
+
+    } catch(err) {
+        console.log(err);
+    } finally {
+        // close live connection between client and database
+        await client.close();
+    }
+});
+
+describe('tests for databaseOps().getPage', function() {
+    it('should retrieve exactly as many results as are in the collection', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
+
+            // defines parameters
+            const query = new Object();
+            const projection = new Object;
+            const pageSize = testData.length;
+            const pageNumber = 1;
+
+            // get results 
+            const results = await getPage(query, projection, pageNumber, pageSize);
+
+            // test that the returned array has as many items as the testData array
+            expect(results.length).toBe(testData.length);
+        } catch(err) {
+            console.log(err);
+        }
+    });
+
+    it('Should get empty array if pageSize * pageNumber extends index range of results', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
+
+            // defines parameters
+            const query = new Object;
+            const projection = new Object;
+            const pageSize = testData.length;
+            const pageNumber = 2;
+
+            // get results 
+            const results = await getPage(query, projection, pageNumber, pageSize);
+
+            // test that the returned array is empty
+            expect(results.length).toBe(0);
+        } catch(err) {
+            console.log(err);
+        }
+    });
+
+    it('Throws error if non-object type arg is passed to query or projection parameter', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
+
+            // defines parameters
+            const query = new String('This is a string');
+            const projection = new Object();
+            const pageSize = testData.length;
+            const pageNumber = 1;
+
+            // call function, but don't store return value since error is expected
+            await getPage(query, projection, pageNumber, pageSize);
+        } catch(err) {
+            expect(err.message).toStrictEqual('query and projection args must both be type Object.');
+        }
+    });
+
+    it('Throws error if pageNumber or pageSize are less than 1', async function() {
+        try {
+            // retrieve getPage function from object returned from databaseOps function closure
+            const { getPage } = await databaseOps(TEST_COLLECTION_NAME);        
+
+            // defines parameters
+            const query = new Object();
+            const projection = new Object();
+            const pageSize = testData.length;
+            const pageNumber = 0;
+
+            await getPage(query, projection, pageNumber, pageSize);
+        } catch(err) {
+            expect(err.message).toStrictEqual('indices for pageNumber and pageSize begin at 1; cannot be 0 or negative numbers');
+        }
+    });
+});
+
+afterAll(async () => {
+    // create new MongoClient instance
+    const client = new MongoClient(DB_URI, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true
+    });
+
+    try {
+        // initiate live connection between client instance and specified database uri
+        await client.connect();
+
+        // get connection with target test database and collection
+        const database = client.db(DB_NAME);
+        const collection = database.collection(TEST_COLLECTION_NAME);
+
+        // delete all documents in the database
+        await collection.deleteMany({}); // this MUST have an await statement before, or client will attempt closure during deletion
+        
+    } catch (err) {
+        console.log(err);
+    } finally {
+        // close live connection with database
+        await client.close();
+    }
+});
