@@ -335,7 +335,7 @@ describe('tests for databaseOps().updateResource', function() {
 
             // create updates object
             const updates = [
-                { field: 'firstName', value: 'Alyssino' },
+                { field: 'firstName', value: 'Alyssino' }
             ];
 
             // delete document from database (will fail)
@@ -349,8 +349,29 @@ describe('tests for databaseOps().updateResource', function() {
     });
 
     // test that error is thrown when no document is found matching the id input
+    it('should thrown an error when no document is found matching the id input', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
 
-    // test that an error is thrown if any items in the update array are wrong
+            // create and serialize fake id
+            const fakeId = String(new ObjectId());
+
+            const updates = [
+                { field: 'firstName', value: 'Alyssino' }
+            ]
+
+            // execute function
+            document = await updateResource(fakeId, updates);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('No matching documents found');
+            expect(document).toBe(false)
+        }
+    });
 });
 
 afterAll(async () => {
