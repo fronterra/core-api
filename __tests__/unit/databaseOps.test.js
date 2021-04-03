@@ -120,6 +120,14 @@ describe('tests for databaseOps().getPage', function() {
     });
 });
 
+describe('tests for databaseOps().getResource', function() {
+    // test normal behavior
+
+    // test that error is thrown when incorrect paramter type is passed
+
+    // test the error is thrown when paramter type is correct, but no match is found in the database
+});
+
 afterAll(async () => {
     // create new MongoClient instance
     const client = new MongoClient(DB_URI, {
