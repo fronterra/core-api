@@ -120,7 +120,26 @@ async function databaseOps(collectionName) {
              * @param {String} id 
              */
             async deleteResource(id) {
+                try {
+                    // throws error if input is not a string
+                    if (typeof id !== 'string') throw new ExpressError('Input must be a string', 500);
 
+                    // pass id string to ObjectId constructor to create abstract type understood by MongoDB
+                    const _id = new ObjectId(id);
+
+                    // deletes first document with matching _id property (should only be one by definition)
+                    const result = await collection.deleteOne({ _id });
+
+                    // throw error if no document is returned from query
+                    if (!result) throw new ExpressError('No matching documents found', 500);
+
+                    // return result 
+                    return result;
+                } catch (err) {
+                    throw new ExpressError(err.message, err.status || 500);
+                } finally {
+                    await killSwitch();
+                }
             },
             async updateResource() {}
         }
