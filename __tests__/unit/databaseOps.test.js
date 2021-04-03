@@ -172,10 +172,33 @@ describe('tests for databaseOps().getResource', function() {
             error = err;
         } finally {
             expect(error.message).toStrictEqual('Only one string arugment is allowed.', 500);
+            expect(document).toBe(false); // document should still be false if error was thrown
+        }
+    });
+
+
+    // test the error is thrown when paramter type is correct, but no match is found in the database
+    it('should throw an error when input id does not match any documents in the database', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { getResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create fake id string
+            const fakeId = String(new ObjectId());
+
+            // execute function
+            document = await getResource(fakeId);
+
+        } catch(err) {
+            error = err;
+        } finally {
+            // test results
+            expect(error.message).toStrictEqual('No matching documents found');
             expect(document).toBe(false);
         }
     });
-    // test the error is thrown when paramter type is correct, but no match is found in the database
 });
 
 afterAll(async () => {
