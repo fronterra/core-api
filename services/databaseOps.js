@@ -109,15 +109,6 @@ async function databaseOps(collectionName) {
                     await killSwitch();
                 }
             },
-            async search(query) {
-                try {
-                    const results = collection.find(query);
-                    const array = await results.toArray();
-                    return array;
-                } catch (err) {
-                    throw new ExpressError(err.message, err.status || 500);
-                }
-            },
             async setManyResources() {},
             async setResource() {},
             async deleteResource() {},
