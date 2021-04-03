@@ -111,7 +111,17 @@ async function databaseOps(collectionName) {
             },
             async setManyResources() {},
             async setResource() {},
-            async deleteResource() {},
+            /**
+             * Takes one parameter, `id <String>`, and deletes the resource 
+             * from the database. If no resource is found, or the input type 
+             * is incorrect, the function will throw an error. Otherwise, 
+             * it returns `true`.
+             * 
+             * @param {String} id 
+             */
+            async deleteResource(id) {
+
+            },
             async updateResource() {}
         }
     } catch (err) {
