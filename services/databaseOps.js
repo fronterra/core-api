@@ -148,8 +148,13 @@ async function databaseOps(collectionName) {
              * expected type, or if the provided `id` string does not match
              * and documents in the database.
              * 
-             * @param {String} id
-             * @param {Object[]} updates
+             * @param {String} id the _id property of a MongoDB document
+             * @param {Object[]} updates an array of objects, where each 
+             * object has exactly two keys: `field` and `value`. The `field` 
+             * property describes the path (using dot-notation for nested fields) 
+             * in a given document to the field to be modified. The `value` property 
+             * contains the information that the described field is going to be 
+             * overwritten with.
              */
             async updateResource(id, updates) {}
         }
