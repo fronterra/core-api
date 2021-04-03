@@ -156,7 +156,25 @@ describe('tests for databaseOps().getResource', function() {
 
 
     // test that error is thrown when incorrect paramter type is passed
+    it('should throw an error when incorrect parameter type is passed', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { getResource } = await databaseOps(TEST_COLLECTION_NAME);
 
+            // incorrect input type
+            const numberInput = 5;
+
+            // get document from database
+            document = await getResource(numberInput);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('Only one string arugment is allowed.', 500);
+            expect(document).toBe(false);
+        }
+    });
     // test the error is thrown when paramter type is correct, but no match is found in the database
 });
 
