@@ -109,8 +109,7 @@ async function databaseOps(collectionName) {
                     await killSwitch();
                 }
             },
-            async setManyResources() {},
-            async setResource() {},
+            async setResources() {},
             /**
              * Takes one parameter, `id <String>`, and deletes the resource 
              * from the database. If no resource is found, or the input type 
