@@ -323,6 +323,30 @@ describe('tests for databaseOps().updateResource', function() {
     });
 
     // test that error is thrown when incorrect input type is passed
+    it('should throw an error when the first parameter is not a string', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // input type
+            const _id = 5;
+
+            // create updates object
+            const updates = [
+                { field: 'firstName', value: 'Alyssino' },
+            ];
+
+            // delete document from database (will fail)
+            document = await deleteResource(numberInput);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('First parameter must be a string', 500);
+            expect(document).toBe(false); // document should still be false if error was thrown
+        }
+    });
 
     // test that error is thrown when no document is found matching the id input
 
