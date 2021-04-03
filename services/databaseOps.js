@@ -140,7 +140,18 @@ async function databaseOps(collectionName) {
                     await killSwitch();
                 }
             },
-            async updateResource() {}
+            /**
+             * Takes two parameters, `id <String>` and `updates <Object[]>`,
+             * and performs all modifications described in the `updates` array,
+             * finally returning the `<Number>` of successful modifications.
+             * The function throws an error if either input is not of the
+             * expected type, or if the provided `id` string does not match
+             * and documents in the database.
+             * 
+             * @param {String} id
+             * @param {Object[]} updates
+             */
+            async updateResource(id, updates) {}
         }
     } catch (err) {
         throw new ExpressError(err.message, err.status || 500);
