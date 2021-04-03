@@ -131,10 +131,10 @@ async function databaseOps(collectionName) {
                     const result = await collection.deleteOne({ _id });
 
                     // throw error if no document is returned from query
-                    if (!result) throw new ExpressError('No matching documents found', 500);
+                    if (result.deletedCount === 0) throw new ExpressError('No matching documents found', 500);
 
                     // return result 
-                    return result;
+                    return true;
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
                 } finally {
