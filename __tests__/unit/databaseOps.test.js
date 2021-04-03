@@ -139,8 +139,10 @@ describe('tests for databaseOps().getResource', function() {
             // get first item in test data array
             const testDataFirstItem = testData[0]
 
+            const _id = String(testDataFirstItem._id)
+
             // get document from database
-            const document = await getResource(testDataFirstItem._id);
+            const document = await getResource(_id);
 
             // test that the retreived item matches the mock data item inserted earlier:
             // check against firstName prop
@@ -190,6 +192,87 @@ describe('tests for databaseOps().getResource', function() {
 
             // execute function
             document = await getResource(fakeId);
+
+        } catch(err) {
+            error = err;
+        } finally {
+            // test results
+            expect(error.message).toStrictEqual('No matching documents found');
+            expect(document).toBe(false);
+        }
+    });
+});
+
+describe('tests for databaseOps().deleteResource', function () {
+    // test normal behavior
+    it('should delete the correct item from database when given valid id string', async function() {
+        let error = false;
+        let queryResult = false;
+        try {
+            // get deleteResource to test that function behaves correctly,
+            // and also retrieve getResource for a follow up test
+            // to check that the document has actually been deleted from
+            // the database
+            const { deleteResource } = await databaseOps(TEST_COLLECTION_NAME);
+            const { getResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // get first item in test data array
+            const testDataFirstItem = testData[0]
+
+            const _id = String(testDataFirstItem._id)
+
+            // delete document from database
+            const result = await deleteResource(_id);
+
+            // test that result is true
+            expect(result).toBe(true);
+
+            // attempt retrieval of deleted item
+            queryResult = await getResource(_id);
+
+        } catch (err) {
+            error = err;
+        } finally {
+            // mini integration-test with getResource results
+            expect(queryResult).toBe(false);
+            expect(error.message).toStrictEqual('No matching documents found');
+        }
+    });
+
+    // test that error is thrown when passed incorrect input type
+    it('should throw an error when incorrect parameter type is passed', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { deleteResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // incorrect input type
+            const numberInput = 5;
+
+            // delete document from database (will fail)
+            document = await deleteResource(numberInput);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('Input must be a string', 500);
+            expect(document).toBe(false); // document should still be false if error was thrown
+        }
+    });
+
+    // test that error is thrown when valid id is passed, but no matching document is found for deletion
+    it('should throw an error when input id does not match any documents in the database', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { deleteResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create fake id string
+            const fakeId = String(new ObjectId());
+
+            // execute function
+            document = await deleteResource(fakeId);
 
         } catch(err) {
             error = err;
