@@ -1,5 +1,6 @@
 const { mongoClientHandler } = require('./connect');
 const ExpressError = require('../ExpressError');
+const { ObjectId } = require('bson');
 
 
 /**
@@ -79,14 +80,28 @@ async function databaseOps(collectionName) {
                 }
             },
             /**
-             * Returns the resource belonging to
-             * specified `resourceId`
+             * Takes an `id <String>` parameter as its only input 
+             * and returns the corresponding document (as an <Object>).
+             * The function throws an error if no matching document is
+             * found, or if the input id is not a string.
              * 
-             * @param {String} resourceId
+             * @param {String} id
              */
-            async getResource(resourceId) {
+            async getResource(id) {
                 try {
-                    const result = await collection.findOne({ _id: resourceId });
+                    // throws error if input is not a string
+                    if (typeof id !== 'string') throw new ExpressError('Input must be a string', 500);
+
+                    // pass id string to ObjectId constructor to create abstract type understood by MongoDB
+                    const _id = new ObjectId(id);
+
+                    // queries database for document with an id match input arg
+                    const result = await collection.findOne({ _id });
+
+                    // throw error if no document is returned from query
+                    if (!result) throw new ExpressError('No matching documents found', 500);
+
+                    // return result 
                     return result;
                 } catch (err) {
                     throw new ExpressError(err.message, err.status || 500);
