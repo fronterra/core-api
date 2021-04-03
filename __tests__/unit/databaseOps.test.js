@@ -2,6 +2,7 @@ process.env.NODE_ENV = "test"; // declare test env
 
 const { TEST_COLLECTION_NAME, DB_NAME, DB_URI } = require('../../config');
 const { MongoClient } = require('mongodb');
+const { ObjectId } = require('bson');
 const databaseOps = require('../../services/databaseOps');
 
 // define mock data for tests
@@ -14,6 +15,14 @@ const testData = [
             { firstName: "Claire", hometown: "Columbus" },
             { firstName: "Ceren", hometown: "Istanbul" }
 ];
+
+// for each test data item, create a bson objectId and set into the data object
+// this will me it easier for us to test our query functions later on
+testData.forEach((v) => {
+    v._id = new ObjectId();
+});
+
+
 
 beforeAll(async () => {
     // create new MongoClient instance
@@ -122,6 +131,29 @@ describe('tests for databaseOps().getPage', function() {
 
 describe('tests for databaseOps().getResource', function() {
     // test normal behavior
+    it('should get the correct item from database when given valid _id string', async function() {
+        try {
+            // get function to test
+            const { getResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // get first item in test data array
+            const testDataFirstItem = testData[0]
+
+            // get document from database
+            const document = await getResource(testDataFirstItem._id);
+
+            // test that the retreived item matches the mock data item inserted earlier:
+            // check against firstName prop
+            expect(document.firstName).toStrictEqual(testDataFirstItem.firstName);
+
+            // check against hometown prop
+            expect(document.hometown).toStrictEqual(testDataFirstItem.hometown);
+
+        } catch (err) {
+            console.log(err);
+        }
+    });
+
 
     // test that error is thrown when incorrect paramter type is passed
 
