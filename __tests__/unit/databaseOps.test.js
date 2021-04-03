@@ -372,6 +372,32 @@ describe('tests for databaseOps().updateResource', function() {
             expect(document).toBe(false)
         }
     });
+
+    // test that an error is thrown if any items in the update array are wrong, but id is correct and finds a match
+    it('should throw an error if any items in the update array are wrong, but id is correct and finds a match', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create and serialize target id
+            const _id = String(testData[0]._id);
+
+            // create an updates object with incorrect fields
+            const updates = [
+                { notField: 'firstName', value: 'Alyssino' }
+            ]
+
+            // execute function
+            document = await updateResource(_id, updates);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('All items in updates array must contain both of the following properties: field, value');
+            expect(document).toBe(false)
+        }
+    });
 });
 
 afterAll(async () => {
