@@ -284,6 +284,10 @@ describe('tests for databaseOps().deleteResource', function () {
     });
 });
 
+describe('tests for databaseOps().updateResource', function() {
+
+});
+
 afterAll(async () => {
     // create new MongoClient instance
     const client = new MongoClient(DB_URI, {
