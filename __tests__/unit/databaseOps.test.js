@@ -131,7 +131,7 @@ describe('tests for databaseOps().getPage', function() {
 
 describe('tests for databaseOps().getResource', function() {
     // test normal behavior
-    it('should get the correct item from database when given valid _id string', async function() {
+    it('should get the correct item from database when given valid id string', async function() {
         try {
             // get function to test
             const { getResource } = await databaseOps(TEST_COLLECTION_NAME);
@@ -171,7 +171,7 @@ describe('tests for databaseOps().getResource', function() {
         } catch (err) {
             error = err;
         } finally {
-            expect(error.message).toStrictEqual('Only one string arugment is allowed.', 500);
+            expect(error.message).toStrictEqual('Input must be a string', 500);
             expect(document).toBe(false); // document should still be false if error was thrown
         }
     });
