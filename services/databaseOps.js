@@ -143,7 +143,7 @@ async function databaseOps(collectionName) {
             /**
              * Takes two parameters, `id <String>` and `updates <Object[]>`,
              * and performs all modifications described in the `updates` array,
-             * finally returning the `<Number>` of successful modifications.
+             * finally returning the `<Number>` of modified documents.
              * The function throws an error if either input is not of the
              * expected type, or if the provided `id` string does not match
              * and documents in the database.
@@ -201,6 +201,7 @@ async function databaseOps(collectionName) {
                     // return the number of modified documents
                     return modifiedCount;
                 } catch (err) {
+                    throw new ExpressError(err.message, err.status || 500);
                 } finally {
                     await killSwitch();
                 }
