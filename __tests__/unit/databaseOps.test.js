@@ -3,7 +3,7 @@ process.env.NODE_ENV = "test"; // declare test env
 const { TEST_COLLECTION_NAME, DB_NAME, DB_URI } = require('../../config');
 const { MongoClient } = require('mongodb');
 const { ObjectId } = require('bson');
-const databaseOps = require('../../services/databaseOps');
+const databaseOps = require('../../operations/mongodb/databaseOps');
 
 // define mock data for tests
 const testData = [

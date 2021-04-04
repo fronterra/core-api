@@ -4,7 +4,7 @@ const morgan = require("morgan");
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const ExpressError = require("./ExpressError");
-const media = require('./routes/media');
+const media = require('./controllers/routes/media');
 
 
 // creates an app object
