@@ -426,10 +426,22 @@ describe('tests for databaseOps().setResources', function () {
     });
 
     // test that an error is thrown when input is not an array
+    it('should test that an error is thrown when input is not an array',  async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to be tested
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
 
-    // test that an error is thrown when the input is an empty array
-
-    // test that an error is thrown if any item in array is not an object
+            // execute function with non-array type passed in
+            result = await setResources(2);
+        } catch (err) {
+            error = err; // this block SHOULD fire
+        } finally {
+            expect(result).toBe(false);
+            expect(error.message).toStrictEqual('Input must be an array');
+        }
+    });
 });
 
 afterAll(async () => {
