@@ -387,7 +387,7 @@ describe('tests for databaseOps().updateResource', function() {
             // create an updates object with incorrect fields
             const updates = [
                 { notField: 'firstName', value: 'Alyssino' }
-            ]
+            ];
 
             // execute function
             document = await updateResource(_id, updates);
@@ -396,6 +396,94 @@ describe('tests for databaseOps().updateResource', function() {
         } finally {
             expect(error.message).toStrictEqual('All items in updates array must contain both of the following properties: field, value');
             expect(document).toBe(false)
+        }
+    });
+});
+
+describe('tests for databaseOps().setResources', function () {
+    // test normal behavior
+    it('should insert documents and return the number of inserted documents', async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to be tested
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create fake documents
+            const documents = [
+                { firstName: "Ryan", hometown: "Wadsworth" },
+                { firstName: "Zach", hometown: "Pasadena" }
+            ];
+
+            // insert documents into database
+            result = await setResources(documents);
+        } catch (err) {
+            error = err; // this block should never execute
+        } finally {
+            expect(result).toBe(2); // result should be changed from false to the number of successfully inserted resources
+            expect(error).toBe(false); // error block should never execute
+        }
+    });
+
+    // test that an error is thrown when input is not an array
+    it('should test that an error is thrown when input is not an array',  async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to be tested
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // execute function with non-array type passed in
+            result = await setResources(2);
+        } catch (err) {
+            error = err; // this block SHOULD fire
+        } finally {
+            expect(result).toBe(false);
+            expect(error.message).toStrictEqual('Input must be an array');
+        }
+    });
+
+
+    // test that an error is thrown when the input is an empty array
+    it('should throw an error if input array is empty', async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to test
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // execute function with empty array
+            result = await setResources([]);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(result).toBe(false);
+            expect(error.message).toStrictEqual('Input array cannot be empty');
+        }
+    });
+
+
+    // test that an error is thrown if any item in array is not an object
+    it('should throw an error if any item in the array is not an object', async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to test
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create dataset with one non-array item
+            const documents = [
+                { firstName: "Brandon", hometown: "Austin" },
+                4
+            ];
+
+            // call function
+            result = await setResources(documents);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(result).toBe(false);
+            expect(error.message).toStrictEqual('All array items must be objects');
         }
     });
 });
