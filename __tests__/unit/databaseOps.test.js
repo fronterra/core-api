@@ -317,7 +317,7 @@ describe('tests for databaseOps().updateResource', function() {
             error = err; // this should not execute
         } finally {
             // test against stored result values
-            expect(result).toBe(2); // indicates that two successful changes were made
+            expect(result).toBe(1); // indicates that two successful changes were made
             expect(error).toBe(false); // should be false if no error is thrown
         }
     });
@@ -339,7 +339,7 @@ describe('tests for databaseOps().updateResource', function() {
             ];
 
             // delete document from database (will fail)
-            document = await deleteResource(numberInput);
+            document = await updateResource(_id, updates);
         } catch (err) {
             error = err;
         } finally {
