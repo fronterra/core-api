@@ -461,6 +461,31 @@ describe('tests for databaseOps().setResources', function () {
             expect(error.message).toStrictEqual('Input array cannot be empty');
         }
     });
+
+
+    // test that an error is thrown if any item in array is not an object
+    it('should throw an error if any item in the array is not an object', async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to test
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create dataset with one non-array item
+            const documents = [
+                { firstName: "Brandon", hometown: "Austin" },
+                4
+            ];
+
+            // call function
+            result = await setResources(documents);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(result).toBe(false);
+            expect(error.message).toStrictEqual('All array items must be objects');
+        }
+    });
 });
 
 afterAll(async () => {
