@@ -400,6 +400,16 @@ describe('tests for databaseOps().updateResource', function() {
     });
 });
 
+describe('tests for databaseOps().setResources', function () {
+    // test normal behavior
+
+    // test that an error is thrown when input is not an array
+
+    // test that an error is thrown when the input is an empty array
+
+    // test that an error is thrown if any item in array is not an object
+});
+
 afterAll(async () => {
     // create new MongoClient instance
     const client = new MongoClient(DB_URI, {
