@@ -442,6 +442,25 @@ describe('tests for databaseOps().setResources', function () {
             expect(error.message).toStrictEqual('Input must be an array');
         }
     });
+
+
+    // test that an error is thrown when the input is an empty array
+    it('should throw an error if input array is empty', async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to test
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // execute function with empty array
+            result = await setResources([]);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(result).toBe(false);
+            expect(error.message).toStrictEqual('Input array cannot be empty');
+        }
+    });
 });
 
 afterAll(async () => {
