@@ -1,5 +1,5 @@
-const databaseOps = require('../services/databaseOps');
-const argsMatchOp = require('../services/argsMatchOp');
+const databaseOps = require('../operations/mongodb/databaseOps');
+const argsMatchOp = require('./argsMatchOp');
 
 const ExpressError = require('../ExpressError');
 

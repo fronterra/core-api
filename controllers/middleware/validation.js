@@ -1,4 +1,4 @@
-const ExpressError = require('../ExpressError');
+const ExpressError = require('../../ExpressError');
 
 /**
  * Validates incoming request body for following

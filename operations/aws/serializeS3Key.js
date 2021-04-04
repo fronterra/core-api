@@ -1,4 +1,4 @@
-const ExpressError = require('../ExpressError');
+const ExpressError = require('../../ExpressError');
 
 const checkInputs = (type, inputs) => {
     for (let input of inputs) {

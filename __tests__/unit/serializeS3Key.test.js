@@ -1,4 +1,4 @@
-const serializeS3Key = require('../../services/serializeS3Key');
+const serializeS3Key = require('../../operations/aws/serializeS3Key');
 const { ObjectID } = require('bson');
 
 
