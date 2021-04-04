@@ -118,7 +118,28 @@ async function databaseOps(collectionName) {
              * 
              * @param {Object[]} documents
              */
-            async setResources(documents) {},
+            async setResources(documents) {
+                try {
+                    // throw error if documents array is empty or not an array
+                    if (!Array.isArray(documents)) throw new ExpressError('Input must be an array', 500);
+                    if (documents.length === 0) throw new ExpressError('Input array cannot be empty', 500);
+
+                    // throw error if any array items are not objects
+                    documents.forEach((o) => {
+                        if (typeof o !== 'object') throw new ExpressError('All array items must be objects', 500);
+                    });
+
+                    // insert items into database
+                    const result = await collection.insertMany(documents);
+
+                    // return the number of inserted items
+                    return result.insertedCount;
+                } catch (err) {
+                    throw new ExpressError(err.message, err.status || 500);
+                } finally {
+                    await killSwitch();
+                }
+            },
             /**
              * Takes one parameter, `id <String>`, and deletes the resource 
              * from the database. If no resource is found, or the input type 
