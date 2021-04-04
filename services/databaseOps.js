@@ -109,8 +109,7 @@ async function databaseOps(collectionName) {
                     await killSwitch();
                 }
             },
-            async setManyResources() {},
-            async setResource() {},
+            async setResources() {},
             /**
              * Takes one parameter, `id <String>`, and deletes the resource 
              * from the database. If no resource is found, or the input type 
@@ -141,7 +140,72 @@ async function databaseOps(collectionName) {
                     await killSwitch();
                 }
             },
-            async updateResource() {}
+            /**
+             * Takes two parameters, `id <String>` and `updates <Object[]>`,
+             * and performs all modifications described in the `updates` array,
+             * finally returning the `<Number>` of modified documents.
+             * The function throws an error if either input is not of the
+             * expected type, or if the provided `id` string does not match
+             * and documents in the database.
+             * 
+             * @param {String} id the _id property of a MongoDB document
+             * @param {Object[]} updates an array of objects, where each 
+             * object has exactly two keys: `field` and `value`. The `field` 
+             * property describes the path (using dot-notation for nested fields) 
+             * in a given document to the field to be modified. The `value` property 
+             * contains the information that the described field is going to be 
+             * overwritten with.
+             */
+            async updateResource(id, updates) {
+                try {
+                    // throws error if id input is not a string
+                    if (typeof id !== 'string') throw new ExpressError('First parameter must be a string', 500);
+
+                    // throws error if updates is either an empty array or not an array
+                    if (!Array.isArray(updates) || updates.length === 0) throw new ExpressError('Second parameter must be an array with at least one item', 500);
+
+                    // creates an empty object to contain all updates
+                    const updatesObject = new Object();
+            
+                    // map the updates array fields into the updatesObject
+                    updates.forEach((o) => {
+                        // throws error if updates array contains an object with incorrect fields
+                        if (!o.hasOwnProperty('field') || (!o.hasOwnProperty('value'))) throw new ExpressError('All items in updates array must contain both of the following properties: field, value', 500);
+
+                        // set field path and overwrite value into the updates object as a key-value-pair
+                        updatesObject[o.field] = o.value;
+                    });
+
+                    //insert changes into target document
+                    const result = await collection.updateOne(
+                        {_id: new ObjectId(id)},
+                        {
+                            $set: {
+                                ...updatesObject
+                            }
+                        }
+                    );
+
+                    // if no response is returned throw a general error
+                    if (!result) throw new ExpressError('No response was returned from the database operation', 500);
+
+                    //destructure count properties
+                    const { matchedCount, modifiedCount } = result;
+
+                    // throw error if no document was matched
+                    if (matchedCount === 0) throw new ExpressError('No matching documents found', 500);
+
+                    // throw error if no modifications were made
+                    if (modifiedCount === 0) throw new ExpressError('Updates were expected, but none were made', 500);
+
+                    // return the number of modified documents
+                    return modifiedCount;
+                } catch (err) {
+                    throw new ExpressError(err.message, err.status || 500);
+                } finally {
+                    await killSwitch();
+                }
+            }
         }
     } catch (err) {
         throw new ExpressError(err.message, err.status || 500);

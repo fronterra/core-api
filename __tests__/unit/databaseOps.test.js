@@ -284,6 +284,122 @@ describe('tests for databaseOps().deleteResource', function () {
     });
 });
 
+describe('tests for databaseOps().updateResource', function() {
+    // test normal behavior
+    it('should correctly update the target document', async function() {
+        let result = false;
+        let error = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // define a valid updates array
+            const updates = [
+                { field: 'firstName', value: 'Austino' },
+                { field: 'hometown', value: 'New York City' }
+            ];
+
+            // get id of test data item where firstName property is `Austin`
+            let targetId;
+
+            testData.forEach(v => {
+                if (v.firstName === 'Austin') {
+                    targetId = v._id;
+                }
+            });
+
+            // construct id string from ObjectId type
+            const _id = String(targetId);
+
+            // execute update function
+            result = await updateResource(_id, updates);
+        } catch (err) {
+            error = err; // this should not execute
+        } finally {
+            // test against stored result values
+            expect(result).toBe(1); // indicates that two successful changes were made
+            expect(error).toBe(false); // should be false if no error is thrown
+        }
+    });
+
+    // test that error is thrown when incorrect input type is passed
+    it('should throw an error when the first parameter is not a string', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // input type
+            const _id = 5;
+
+            // create updates object
+            const updates = [
+                { field: 'firstName', value: 'Alyssino' }
+            ];
+
+            // delete document from database (will fail)
+            document = await updateResource(_id, updates);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('First parameter must be a string', 500);
+            expect(document).toBe(false); // document should still be false if error was thrown
+        }
+    });
+
+    // test that error is thrown when no document is found matching the id input
+    it('should thrown an error when no document is found matching the id input', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create and serialize fake id
+            const fakeId = String(new ObjectId());
+
+            const updates = [
+                { field: 'firstName', value: 'Alyssino' }
+            ]
+
+            // execute function
+            document = await updateResource(fakeId, updates);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('No matching documents found');
+            expect(document).toBe(false)
+        }
+    });
+
+    // test that an error is thrown if any items in the update array are wrong, but id is correct and finds a match
+    it('should throw an error if any items in the update array are wrong, but id is correct and finds a match', async function() {
+        let error = false;
+        let document = false;
+        try {
+            // get function to test
+            const { updateResource } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create and serialize target id
+            const _id = String(testData[0]._id);
+
+            // create an updates object with incorrect fields
+            const updates = [
+                { notField: 'firstName', value: 'Alyssino' }
+            ]
+
+            // execute function
+            document = await updateResource(_id, updates);
+        } catch (err) {
+            error = err;
+        } finally {
+            expect(error.message).toStrictEqual('All items in updates array must contain both of the following properties: field, value');
+            expect(document).toBe(false)
+        }
+    });
+});
+
 afterAll(async () => {
     // create new MongoClient instance
     const client = new MongoClient(DB_URI, {
