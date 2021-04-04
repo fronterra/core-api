@@ -387,7 +387,7 @@ describe('tests for databaseOps().updateResource', function() {
             // create an updates object with incorrect fields
             const updates = [
                 { notField: 'firstName', value: 'Alyssino' }
-            ]
+            ];
 
             // execute function
             document = await updateResource(_id, updates);
@@ -402,6 +402,28 @@ describe('tests for databaseOps().updateResource', function() {
 
 describe('tests for databaseOps().setResources', function () {
     // test normal behavior
+    it('should insert documents and return the number of inserted documents', async function () {
+        let result = false;
+        let error = false;
+        try {
+            // get function to be tested
+            const { setResources } = await databaseOps(TEST_COLLECTION_NAME);
+
+            // create fake documents
+            const documents = [
+                { firstName: "Ryan", hometown: "Wadsworth" },
+                { firstName: "Zach", hometown: "Pasadena" }
+            ];
+
+            // insert documents into database
+            result = await setResources(documents);
+        } catch (err) {
+            error = err; // this block should never execute
+        } finally {
+            expect(result).toBe(2); // result should be changed from false to the number of successfully inserted resources
+            expect(error).toBe(false); // error block should never execute
+        }
+    });
 
     // test that an error is thrown when input is not an array
 
