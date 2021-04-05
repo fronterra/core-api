@@ -20,7 +20,7 @@ jobs:
       - run: npm ci
 
       - run: brew install mongodb-community
-      - run: brew services start mongo-community
+      - run: brew services start mongodb-community
         
       - run: npm test
         env:
