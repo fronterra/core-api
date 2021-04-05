@@ -70,10 +70,15 @@ function s3Bucket(region, bucketName) {
         async uploadObject({ itemId, itemType, groupId, groupType }, file) {
 
             try {
+                // throw error if first param is not an object
                 if (typeof keys !== 'object') throw new ExpressError('keys parameter must be an object', 500);
 
+                // destructure properties from keys
+                const { itemId, itemType, groupId, groupType } = keys;
+
+                // throw error if any key-value pairs do NOT contain strings
                 [itemId, itemType, groupId, groupType].forEach(v => {
-                    if (typeof v !== 'string') throw new ExpressError('All members of first parameter ');
+                    if (typeof v !== 'string') throw new ExpressError('All memeber values of keys must be strings', 500);
                 });
 
                 // this will throw an error if inputs are not correctly typed
