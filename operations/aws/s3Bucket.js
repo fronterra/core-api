@@ -52,20 +52,17 @@ function s3Bucket(region, bucketName) {
 
     return {
         /**
-         * Takes a `keysObject` object containing various key types and ids, in addition to
-         * a `body` argument containing the file to be uploaded. The function serializes the
-         * contents of `keysObject` into a string, and then passes the new key string along
-         * with the `body` file to an S3 bucket for storage.
+         * Takes two paramters, `keys <Object>` and `file <any>`, and stores the
+         * data from `file` in an s3 bucket at a location given by the contents
+         * of `keys`.
          * 
-         * The function returns the response body from AWS. An example response body is available
-         * below.
+         * @param {Object} keys an object containing four properties: `itemId`,
+         * `itemType`, `groupId`, `groupType`, all of which are strings.
          * 
-         * @param {String} keysObject
-         * 
-         * @param {String} keysObject.itemId
-         * @param {String} keysObject.itemType
-         * @param {String} keysObject.groupId
-         * @param {String} keysObject.groupType
+         * @param {String} keys.itemId
+         * @param {String} keys.itemType
+         * @param {String} keys.groupId
+         * @param {String} keys.groupType
          * 
          * @param {any} file
          * 
@@ -73,6 +70,10 @@ function s3Bucket(region, bucketName) {
         async uploadObject({ itemId, itemType, groupId, groupType }, file) {
 
             try {
+                [itemId, itemType, groupId, groupType].forEach(v => {
+                    if (typeof v !== 'string') throw new ExpressError();
+                });
+
                 // this will throw an error if inputs are not correctly typed
                 const serializedKey = serializeS3Key(itemType, itemId, groupType, groupId);
                 
