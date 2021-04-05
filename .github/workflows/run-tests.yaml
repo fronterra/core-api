@@ -28,10 +28,10 @@ jobs:
     steps:
       - uses: actions/checkout@v1     
       - run: npm ci
-      - run: npm test
         env:
           # use localhost for the host here because we are running the job on the VM.
           # If we were running the job on in a container this would be mongodb
           TEST_DB_NAME: test-database
           TEST_DB_URI: http://localhost:27017
-          TEST_COLLECTION_NAME: test-collection
+          TEST_COLLECTION_NAME: test-collection          
+      - run: npm test
