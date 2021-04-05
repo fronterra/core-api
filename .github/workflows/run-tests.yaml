@@ -13,26 +13,19 @@ on:
 
 jobs:
   container-job:
-    runs-on: ubuntu-latest
-
-    # runs all of the steps inside the specified container rather than on the VM host.
-    # Because of this the network configuration changes from host based network to a container network.
-    container:
-      image:  node:10.16-jessie
-
-    services:
-      mongodb:
-        image: mongo
-        ports:
-        - 27017:27017
+    runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v1
       - run: npm ci
+
+      - run: brew install mongodb-community
+      - run: brew services start mongo-community
+        
+      - run: npm test
         env:
           # use localhost for the host here because we are running the job on the VM.
           # If we were running the job on in a container this would be mongodb
           TEST_DB_NAME: test-database
           TEST_DB_URI: mongodb://127.0.0.1:27017
-          TEST_COLLECTION_NAME: test-collection          
-      - run: npm test
+          TEST_COLLECTION_NAME: test-collection  
