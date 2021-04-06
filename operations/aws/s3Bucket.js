@@ -67,7 +67,7 @@ function s3Bucket(region, bucketName) {
          * @param {any} file
          * 
          */
-        async uploadObject({ itemId, itemType, groupId, groupType }, file) {
+        async uploadObject(keys, file) {
 
             try {
                 // throw error if first param is not an object
