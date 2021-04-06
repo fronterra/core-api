@@ -1,12 +1,9 @@
 # GitHub Actions YAML file adapted from actions/example-services repo, ./mongodb directory
 # See for more info: https://github.com/actions/example-services/tree/7ae0b005cc273e2000e12ccf54f01e796c22b3e4
 
-name: Mongodb Service Example
+name: Run Tests
 
 on:
-  push:
-    branches:
-    - main
   pull_request:
     branches:
     - main

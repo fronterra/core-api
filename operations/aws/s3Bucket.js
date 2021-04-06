@@ -1,4 +1,4 @@
-const { S3Client, PutObjectCommand, GetObjectCommand } = require("@aws-sdk/client-s3"); // import aws client sdk
+const { S3Client, PutObjectCommand, GetObjectCommand, DeleteObjectCommand } = require("@aws-sdk/client-s3"); // import aws client sdk
 const serializeS3Key = require('./serializeS3Key'); // import key serializer
 
 /**
@@ -140,6 +140,45 @@ function s3Bucket(region, bucketName) {
 
                 // get file from storage
                 const data = await s3.send(new GetObjectCommand(params));
+
+                // cache the response
+                cacheResponse(data);
+
+                // return data object
+                return data;
+            } catch (err) {
+                // cache error
+                cacheResponse(err);
+
+                // handle and throw new error
+                throw new ExpressError(err.message, err.status || 500);
+            }
+        },
+        /**
+         * Takes on parameter, `key <String>`, and deletes
+         * the file at the location given by `key` in an
+         * AWS S3 bucket. An error is thrown if incorrect
+         * input type is passed. The function returns the
+         * AWS response data.
+         * 
+         * @param {String} key is the location of target object
+         */
+        async deleteObject(key) {
+            try {
+                // throw an error if `key` is not a string
+                if (typeof key !== 'string') throw new ExpressError('key argument must be a string', 500);
+                
+                // checks to see if s3 client is instantiated before attempting retrieval
+                if (!s3) throw new ExpressError('S3Client instance not found', 500);
+
+                // set params object containing bucket name and file target
+                const params = {
+                    Bucket: bucketName,
+                    Key: key
+                };
+
+                // delete file from storage
+                const data = await s3.send(new DeleteObjectCommand(params));
 
                 // cache the response
                 cacheResponse(data);
