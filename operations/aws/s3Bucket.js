@@ -73,13 +73,22 @@ function s3Bucket(region, bucketName) {
                 // throw error if first param is not an object
                 if (typeof keys !== 'object') throw new ExpressError('keys parameter must be an object', 500);
 
+                // define required properties for key param
+                const requiredKeys = ['itemId', 'itemType', 'groupId', 'groupType'];
+
+                // check keys object for required properties and value types
+                requiredKeys.forEach(v => {
+
+                    // throw error if a required key was not passed
+                    if (!keys.hasOwnProperty(v)) throw new ExpressError(`keys argument is missing required property: ${v}`, 500);
+
+                    // throw error if any corresponding value is not a string
+                    if (typeof keys[v] !== 'string') throw new ExpressError('All memeber values of keys must be strings', 500);
+
+                });
+
                 // destructure properties from keys
                 const { itemId, itemType, groupId, groupType } = keys;
-
-                // throw error if any key-value pairs do NOT contain strings
-                [itemId, itemType, groupId, groupType].forEach(v => {
-                    if (typeof v !== 'string') throw new ExpressError('All memeber values of keys must be strings', 500);
-                });
 
                 // this will throw an error if inputs are not correctly typed
                 const serializedKey = serializeS3Key(itemType, itemId, groupType, groupId);
