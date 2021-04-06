@@ -52,27 +52,44 @@ function s3Bucket(region, bucketName) {
 
     return {
         /**
-         * Takes a `keysObject` object containing various key types and ids, in addition to
-         * a `body` argument containing the file to be uploaded. The function serializes the
-         * contents of `keysObject` into a string, and then passes the new key string along
-         * with the `body` file to an S3 bucket for storage.
+         * Takes two paramters, `keys <Object>` and `file <any>`, and stores the
+         * data from `file` in an s3 bucket at a location given by the contents
+         * of `keys`.
          * 
-         * The function returns the response body from AWS. An example response body is available
-         * below.
+         * @param {Object} keys an object containing four properties: `itemId`,
+         * `itemType`, `groupId`, `groupType`, all of which are strings.
          * 
-         * @param {String} keysObject
-         * 
-         * @param {String} keysObject.itemId
-         * @param {String} keysObject.itemType
-         * @param {String} keysObject.groupId
-         * @param {String} keysObject.groupType
+         * @param {String} keys.itemId
+         * @param {String} keys.itemType
+         * @param {String} keys.groupId
+         * @param {String} keys.groupType
          * 
          * @param {any} file
          * 
          */
-        async uploadObject({ itemId, itemType, groupId, groupType }, file) {
+        async uploadObject(keys, file) {
 
             try {
+                // throw error if first param is not an object
+                if (typeof keys !== 'object') throw new ExpressError('keys parameter must be an object', 500);
+
+                // define required properties for key param
+                const requiredKeys = ['itemId', 'itemType', 'groupId', 'groupType'];
+
+                // check keys object for required properties and value types
+                requiredKeys.forEach(v => {
+
+                    // throw error if a required key was not passed
+                    if (!keys.hasOwnProperty(v)) throw new ExpressError(`keys argument is missing required property: ${v}`, 500);
+
+                    // throw error if any corresponding value is not a string
+                    if (typeof keys[v] !== 'string') throw new ExpressError('All memeber values of keys must be strings', 500);
+
+                });
+
+                // destructure properties from keys
+                const { itemId, itemType, groupId, groupType } = keys;
+
                 // this will throw an error if inputs are not correctly typed
                 const serializedKey = serializeS3Key(itemType, itemId, groupType, groupId);
                 
