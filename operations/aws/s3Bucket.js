@@ -118,8 +118,17 @@ function s3Bucket(region, bucketName) {
                 throw new ExpressError(err.message, err.status || 500);
             }
         },
+        /**
+         * Takes one parameter, `key <String>`, and returns
+         * a file from the AWS s3 location given by `key`.
+         * 
+         * @param {String} key storage location of target file
+         */
         async downloadObject(key) {
             try {
+                // throw an error if `key` is not a string
+                if (typeof key !== 'string') throw new ExpressError('key argument must be a string', 500);
+                
                 // checks to see if s3 client is instantiated before attempting retrieval
                 if (!s3) throw new ExpressError('S3Client instance not found', 500);
 
