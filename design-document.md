@@ -27,8 +27,21 @@ Operations--specifically referring to "database operations"--is an abstraction l
 
 ### Models
 #### Summary
-#### Goals
+A model should be constructed for each collection or table in the database. Each should contain, at a minimum, one `static` method for each CRUD operation. 
 
+#### Example Model
+```javascript
+class Model {
+    static async _read() {};
+
+    static async _write() {};
+
+    static async _update() {};
+
+    static async _delete() {};
+}
+```
+#### Specification
 ### Controllers
 #### Summary
 #### Goals
