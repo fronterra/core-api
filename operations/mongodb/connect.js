@@ -50,6 +50,23 @@ async function mongoClientHandler() {
              */
             checkClientConnection() {
                 return !!client;
+            },
+            /**
+             * Defines a timeout period for 
+             * change stream
+             * 
+             * @param {Number} timeoutInMs ms until change stream closes
+             * @param {Object} changeStream
+             */
+            closeChangeStream(changeStream, timeoutInMs = 600000) {
+                return new Promise((resolve) => {
+                    // initiate timeout function
+                    setTimeout(() => {
+                        // execute stream close function on callback
+                        changeStream.close();
+                        resolve();
+                    }, timeoutInMs);
+                });
             }
         }        
     } catch (err) {
