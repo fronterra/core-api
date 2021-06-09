@@ -235,6 +235,33 @@ async function databaseOps(collectionName) {
                 } finally {
                     await killSwitch();
                 }
+            },
+            /**
+             * 
+             * @param {Number} timeoutInMs amount of ms before stream timesout
+             * @param {any[]} pipeline aggregation pipeline
+             * @param {Function} callback callback function to which document is passed during a change event
+             */
+            async changeStream(timeoutInMs = 600000, pipeline = [], callback) {
+                try {
+                    
+                    // initiate change stream with `watch`
+                    const changeStream = collection.watch(pipeline);
+
+                    /** listeners for different events 
+                     * - change
+                     * - error
+                     */
+                    changeStream.on('change', (document) => {
+                        callback(document);
+                    });
+
+                    // TOOD: add listener for error event
+
+                } catch (err) {
+                    // pass on error
+                    throw new Error(err);
+                }
             }
         }
     } catch (err) {
